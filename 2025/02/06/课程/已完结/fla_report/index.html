@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>形式语言与自动机_实验报告 | IAD's Blog</title><meta name="author" content="I_Am_Danny"><meta name="copyright" content="I_Am_Danny"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="项目地址 实验完成度 完成了 PDA 和 TM 的解析器、模拟器 按手册要求完成了 TM 的 verbose 模式 完成了 PDA 的 verbose 模式，对非法输入的处理同 TM，对正常的模拟输出格式如下：123456789101112131415161718192021iad@LAPTOP-H96V848V:~&#x2F;fla$ .&#x2F;bin&#x2F;fla -v .&#x2F;pda&#x2F;anbn.pda abInput">
+<meta property="og:type" content="article">
+<meta property="og:title" content="形式语言与自动机_实验报告">
+<meta property="og:url" content="http://blog.iamdanny.online/2025/02/06/%E8%AF%BE%E7%A8%8B/%E5%B7%B2%E5%AE%8C%E7%BB%93/fla_report/index.html">
+<meta property="og:site_name" content="IAD&#39;s Blog">
+<meta property="og:description" content="项目地址 实验完成度 完成了 PDA 和 TM 的解析器、模拟器 按手册要求完成了 TM 的 verbose 模式 完成了 PDA 的 verbose 模式，对非法输入的处理同 TM，对正常的模拟输出格式如下：123456789101112131415161718192021iad@LAPTOP-H96V848V:~&#x2F;fla$ .&#x2F;bin&#x2F;fla -v .&#x2F;pda&#x2F;anbn.pda abInput">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.iamdanny.online/img/icon.JPG">
+<meta property="article:published_time" content="2025-02-06T12:12:06.000Z">
+<meta property="article:modified_time" content="2025-02-06T12:22:07.762Z">
+<meta property="article:author" content="I_Am_Danny">
+<meta property="article:tag" content="NJU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.iamdanny.online/img/icon.JPG"><link rel="shortcut icon" href="/img/icon.JPG"><link rel="canonical" href="http://blog.iamdanny.online/2025/02/06/%E8%AF%BE%E7%A8%8B/%E5%B7%B2%E5%AE%8C%E7%BB%93/fla_report/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '形式语言与自动机_实验报告',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-02-06 20:22:07'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/icon.JPG" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/banner.png')"><nav id="nav"><span id="blog-info"><a href="/" title="IAD's Blog"><span class="site-name">IAD's Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">形式语言与自动机_实验报告</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-06T12:12:06.000Z" title="发表于 2025-02-06 20:12:06">2025-02-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-06T12:22:07.762Z" title="更新于 2025-02-06 20:22:07">2025-02-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%BE%E7%A8%8B/">课程</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%BE%E7%A8%8B/%E5%B7%B2%E5%AE%8C%E7%BB%93/">已完结</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="形式语言与自动机_实验报告"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><a target="_blank" rel="noopener" href="https://github.com/IAmDannyCN/NJU_fla">项目地址</a></p>
+<h2 id="实验完成度"><a href="#实验完成度" class="headerlink" title="实验完成度"></a>实验完成度</h2><ul>
+<li>完成了 PDA 和 TM 的解析器、模拟器</li>
+<li>按手册要求完成了 TM 的 verbose 模式</li>
+<li>完成了 PDA 的 verbose 模式，对非法输入的处理同 TM，对正常的模拟输出格式如下：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">iad@LAPTOP-H96V848V:~/fla$ ./bin/fla -v ./pda/anbn.pda ab</span><br><span class="line">Input: ab</span><br><span class="line">==================== RUN ====================</span><br><span class="line">State: q0</span><br><span class="line">Input: [a]b</span><br><span class="line">Stack: z</span><br><span class="line">---------------------------------------------</span><br><span class="line">State: q1</span><br><span class="line">Input: a[b]</span><br><span class="line">Stack: 1 z</span><br><span class="line">---------------------------------------------</span><br><span class="line">State: q2</span><br><span class="line">Input: ab[]</span><br><span class="line">Stack: z</span><br><span class="line">---------------------------------------------</span><br><span class="line">State: accept</span><br><span class="line">Input: ab[]</span><br><span class="line">Stack:</span><br><span class="line">---------------------------------------------</span><br><span class="line">true</span><br><span class="line">==================== END ====================</span><br></pre></td></tr></table></figure></li>
+<li>完成了详细的 syntax error 报错，对于已知问题在 verbose 模式下会给出带行号的详细报错（只对第一个文法错误报错）：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">syntax error on line 5: Parser error. Probably missing critical characters.</span><br><span class="line">syntax error on line 5: Status `` is empty or contains illegal characters.</span><br><span class="line">syntax error on line 8: Redefinition of input symbol `b`.</span><br><span class="line">syntax error on line 10: Unrecognized identifier `R`.</span><br><span class="line">syntax error on line 16: Redefinition of #q0.</span><br><span class="line">syntax error on line 20: Undefined status `accept_`.</span><br><span class="line">syntax error on line 25: Input lengths must be 1.</span><br><span class="line">syntax error on line 28: Missing the definition for #F.</span><br><span class="line">......</span><br></pre></td></tr></table></figure></li>
+<li>完成了手册要求的 <code>case.pda</code>、<code>case1.tm</code> 和 <code>case2.tm</code></li>
+<li><strong>另编写了 <code>counter.tm</code>，通过进位计数器向第一条纸带写入 $10000$ 个 <code>X</code>，可以测试出对 STL 容器在扩容时错误处理迭代器导致的问题。</strong></li>
+<li>另编写了 <code>nohalt.tm</code>，不断循环左移和右移，运行足够时间可以测试出在运行过程中潜在的内存泄漏。</li>
+</ul>
+<hr>
+<h2 id="实验思路"><a href="#实验思路" class="headerlink" title="实验思路"></a>实验思路</h2><h5 id="解析器"><a href="#解析器" class="headerlink" title="解析器"></a>解析器</h5><p><strong>我自行实现了一个 <code>StirngView</code> 类，维护一个在给定的 <code>std::string()</code> 上滑动的可视窗口。</strong> 其中实现了如下的关键函数（另有窗口左截断、查询长度、重载下标等常规函数不在此赘述）：</p>
+<ul>
+<li><code>StringView(const string &amp;str, size_t lpos=-1, size_t rpos=-1)</code>：构造函数</li>
+<li><code>StringView sv_before(set&lt;char&gt; stop, set&lt;char&gt; ignore, bool cut=false)</code>：<strong>查询从当前视窗左端点开始，直到第一次出现 <code>stop</code> 中字符为止的子串，然后将其两端在 <code>ignore</code> 中的字符删去，最后返回描述这一段子串的 <code>StringView</code>。</strong> <code>cut</code> 参数代表查询后是否自动左截断至查询结果的右端点。</li>
+</ul>
+<p>使用 <code>StringView::sv_before</code> 可以使用类似于 <code>LL(1)</code> 文法的方式对输入进行解析。例如对于 <code>#Q = &#123;0,run,halt,accept&#125;</code>，可以通过以下的调用序列完成解析：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">StringView <span class="title function_">sv</span><span class="params">(line)</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">string</span> identifier =  sv.sv_before(&#123;<span class="string">&#x27;=&#x27;</span>&#125;, &#123;<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;\t&#x27;</span>&#125;, <span class="literal">true</span>).to_string(); <span class="comment">// &quot;#Q&quot;</span></span><br><span class="line"><span class="built_in">string</span> nothing    =  sv.sv_before(&#123;<span class="string">&#x27;&#123;&#x27;</span>&#125;, &#123;<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;\t&#x27;</span>&#125;, <span class="literal">true</span>).to_string(); <span class="comment">// &quot;&quot;</span></span><br><span class="line"><span class="keyword">while</span>(sv[<span class="number">-1</span>] != <span class="string">&#x27;&#125;&#x27;</span>) &#123;</span><br><span class="line">	<span class="built_in">string</span> cu = sv.sv_before(&#123;<span class="string">&#x27;,&#x27;</span>, <span class="string">&#x27;&#125;&#x27;</span>&#125;, &#123;<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;\t&#x27;</span>&#125;, <span class="literal">true</span>).to_string(); <span class="comment">// &quot;0&quot;, &quot;run&quot;, ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在进行分析时，可以使用 <code>try</code>，在 <code>StringView</code> 解析失败（直到结尾仍未找到 <code>stop</code> 字符）时抛出异常，而后报错 <code>syntax error</code> 即可。</p>
+<h5 id="PDA模拟器"><a href="#PDA模拟器" class="headerlink" title="PDA模拟器"></a>PDA模拟器</h5><p>定义见 <code>./fla-project/pda.h</code>，按照规则进行模拟即可。</p>
+<h5 id="TM模拟器"><a href="#TM模拟器" class="headerlink" title="TM模拟器"></a>TM模拟器</h5><p>定义见 <code>./fla-project/tm.h</code>，按照规则进行模拟即可。使用 <code>deque&lt;char&gt;</code> 表示纸带，初始时纸带宽度均为 $1$，未给出初值的格子全部为空。当一个刺头移动至纸带外时，向对应边缘 <code>push</code> 一个空格。</p>
+<h5 id="verbose模式"><a href="#verbose模式" class="headerlink" title="verbose模式"></a>verbose模式</h5><p>我的 <code>verbose</code> 模式牺牲了一定的运行效率：会将当前栈&#x2F;纸带做一份完整拷贝，去除多余空格后计算排版距离、整理输出。具体实现见 <code>./fla-project/tm.c: TM::run</code>。</p>
+<hr>
+<h2 id="实验问题"><a href="#实验问题" class="headerlink" title="实验问题"></a>实验问题</h2><blockquote>
+<p>TM 模拟器稳定在 <code>deque&lt;char&gt;</code> 长度达到 2560 后触发 Segmentation Fault</p>
+</blockquote>
+<p>我使用迭代器数组保存了每一个磁头的位置，在左移磁头时使用 <code>it--</code> 进行更新。但在 <code>push_front()</code> 后 <code>deque</code> 可能扩容导致迭代器失效，此时需要同步更新迭代器。<strong>于是编写了 <code>./tm/counter.tm</code> 用于测试这种 bug。</strong> 也可以使用 <code>./bin/fla ./tm/case1.tm a(repeat 50 times)b(repeat 50 times)</code> 触发。</p>
+<hr>
+<h2 id="感想与建议"><a href="#感想与建议" class="headerlink" title="感想与建议"></a>感想与建议</h2><ol>
+<li>建议将文档写的更加完备：目前很多 corner case 下的行为（例如：TM输入均为合法字符但不在语言中、是否可以对 verbose 下的文法错误详细报错等）没有明确阐述，需要翻FAQ&#x2F;提问。</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.iamdanny.online">I_Am_Danny</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.iamdanny.online/2025/02/06/%E8%AF%BE%E7%A8%8B/%E5%B7%B2%E5%AE%8C%E7%BB%93/fla_report/">http://blog.iamdanny.online/2025/02/06/%E8%AF%BE%E7%A8%8B/%E5%B7%B2%E5%AE%8C%E7%BB%93/fla_report/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.iamdanny.online" target="_blank">IAD's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/NJU/">NJU</a></div><div class="post_share"><div class="social-share" data-image="/img/icon.JPG" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/02/06/%E9%9A%8F%E7%AC%94/About%20me/" title="About me"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">About me</div></div></a></div><div class="next-post pull-right"><a href="/2025/02/06/%E8%AF%BE%E7%A8%8B/%E5%B7%B2%E5%AE%8C%E7%BB%93/compiler_final/" title="编译原理_期末复习"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">编译原理_期末复习</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2025/09/25/%E8%AF%BE%E7%A8%8B/%E8%AF%BE%E7%A8%8B%E8%AF%84%E4%BB%B7/ALL_judge/" title="NJU 课程评价_目录"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-25</div><div class="title">NJU 课程评价_目录</div></div></a></div><div><a href="/2025/09/25/%E8%AF%BE%E7%A8%8B/%E8%AF%BE%E7%A8%8B%E8%AF%84%E4%BB%B7/compiler_judge/" title="课程评价_编译原理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-25</div><div class="title">课程评价_编译原理</div></div></a></div><div><a href="/2025/09/25/%E8%AF%BE%E7%A8%8B/%E8%AF%BE%E7%A8%8B%E8%AF%84%E4%BB%B7/dlco_judge/" title="课程评价_数字逻辑与计算机组成"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-25</div><div class="title">课程评价_数字逻辑与计算机组成</div></div></a></div><div><a href="/2025/09/25/%E8%AF%BE%E7%A8%8B/%E8%AF%BE%E7%A8%8B%E8%AF%84%E4%BB%B7/cryptography_judge/" title="课程评价_密码学原理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-25</div><div class="title">课程评价_密码学原理</div></div></a></div><div><a href="/2025/09/25/%E8%AF%BE%E7%A8%8B/%E8%AF%BE%E7%A8%8B%E8%AF%84%E4%BB%B7/attack_judge/" title="课程评价_网络攻防实战"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-25</div><div class="title">课程评价_网络攻防实战</div></div></a></div><div><a href="/2025/09/25/%E8%AF%BE%E7%A8%8B/%E8%AF%BE%E7%A8%8B%E8%AF%84%E4%BB%B7/fla_judge/" title="课程评价_形式语言与自动机"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-25</div><div class="title">课程评价_形式语言与自动机</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/icon.JPG" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">I_Am_Danny</div><div class="author-info__description">I_Am_Not_Danny</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/IAmDannyCN"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/IAmDannyCN" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%AE%8C%E6%88%90%E5%BA%A6"><span class="toc-number">1.</span> <span class="toc-text">实验完成度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%9D%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">实验思路</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">解析器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#PDA%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="toc-number">2.0.0.2.</span> <span class="toc-text">PDA模拟器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TM%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="toc-number">2.0.0.3.</span> <span class="toc-text">TM模拟器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#verbose%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.0.0.4.</span> <span class="toc-text">verbose模式</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">实验问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%84%9F%E6%83%B3%E4%B8%8E%E5%BB%BA%E8%AE%AE"><span class="toc-number">4.</span> <span class="toc-text">感想与建议</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By I_Am_Danny</div><div class="footer_custom_text"><style>.custom-link { font-family: "微软雅黑 Bold"; font-size: 16px; color: #0016BA; text-decoration: none; transition: color 0.5s, opacity 0.5s; } .custom-link:hover { color: #C40003; text-decoration: none; } .custom-link:visited { color: #0016BA; } </style><script>function changeTextOnHover(element, newText, originalText) { element.onmouseover = function() { element.style.opacity = 0; setTimeout(function() { element.innerText = newText; element.style.opacity = 1; }, 500); }; element.onmouseout = function() { element.style.opacity = 0; setTimeout(function() { element.innerText = originalText; element.style.opacity = 1; }, 500); }; } window.onload = function() { var linkElement = document.getElementById("custom-link"); changeTextOnHover(linkElement, "如潮涌至 领你归乡", "愿为逝者哀哭 泣下如雨 充盈渡川"); };</script><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Ri421X7sS" id="custom-link" class="custom-link">愿为逝者哀哭 泣下如雨 充盈渡川</a><br></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
