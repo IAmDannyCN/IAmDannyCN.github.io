@@ -1,0 +1,240 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Filters &amp; Sketches | IAD's Blog</title><meta name="author" content="I_Am_Danny"><meta name="copyright" content="I_Am_Danny"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="简介这里是一个对于常见过滤器及其变体的总结，目前包括：  Bloom Filter IBLT Count-Min Sketch Cuckoo Sketch Augmented Sketch Fermat Sketch(ChamaleMon) HyperLogLog  为什么我们需要过滤器？多数情况下是因为我们没办法处理所有的数据，需要一些近似的手段保存和记录数据。尤其是在交换机上，不仅能调配的资源">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Filters &amp; Sketches">
+<meta property="og:url" content="http://blog.iamdanny.online/2025/11/03/%E7%BD%91%E7%BB%9C/Filters%20and%20Sketches/index.html">
+<meta property="og:site_name" content="IAD&#39;s Blog">
+<meta property="og:description" content="简介这里是一个对于常见过滤器及其变体的总结，目前包括：  Bloom Filter IBLT Count-Min Sketch Cuckoo Sketch Augmented Sketch Fermat Sketch(ChamaleMon) HyperLogLog  为什么我们需要过滤器？多数情况下是因为我们没办法处理所有的数据，需要一些近似的手段保存和记录数据。尤其是在交换机上，不仅能调配的资源">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.iamdanny.online/img/icon.JPG">
+<meta property="article:published_time" content="2025-11-03T14:30:00.000Z">
+<meta property="article:modified_time" content="2025-11-03T14:29:27.189Z">
+<meta property="article:author" content="I_Am_Danny">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.iamdanny.online/img/icon.JPG"><link rel="shortcut icon" href="/img/icon.JPG"><link rel="canonical" href="http://blog.iamdanny.online/2025/11/03/%E7%BD%91%E7%BB%9C/Filters%20and%20Sketches/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Filters & Sketches',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-11-03 22:29:27'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/icon.JPG" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/banner.png')"><nav id="nav"><span id="blog-info"><a href="/" title="IAD's Blog"><span class="site-name">IAD's Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Filters &amp; Sketches</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-03T14:30:00.000Z" title="发表于 2025-11-03 22:30:00">2025-11-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-03T14:29:27.189Z" title="更新于 2025-11-03 22:29:27">2025-11-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C/">网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Filters &amp; Sketches"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>这里是一个对于常见过滤器及其变体的总结，目前包括：</p>
+<ul>
+<li>Bloom Filter</li>
+<li>IBLT</li>
+<li>Count-Min Sketch</li>
+<li>Cuckoo Sketch</li>
+<li>Augmented Sketch</li>
+<li>Fermat Sketch(ChamaleMon)</li>
+<li>HyperLogLog</li>
+</ul>
+<p>为什么我们需要过滤器？多数情况下是因为我们没办法处理所有的数据，需要一些近似的手段保存和记录数据。尤其是在交换机上，不仅能调配的资源十分有限，需要处理的流量也极大。我们不得不使用各种过滤器搭建数据面 Sketch 记录和保存我们所需数据某个聚合（当然也可以动态地由控制面调节具体参数），否则交换机本身、通信链路都无能处理。</p>
+<p>在使用过滤器时，最朴素的用法是：定义好桶（cell）的字段，直接按需收集信息。常见的优化方式包括：在 Ingress 和 Egress 分别部署两个过滤器，通过分析过滤器差值得到数据（如丢包）；在字段中使用 XOR 以满足可逆性；在过滤器之前前置一个 Bloom Filter，确保流入过滤器的数据严格不重……我们并不要求过滤器得到的结果严格正确，但一般只允许出现 negl 概率的假阳性（例如 Bloom Filter），而不允许出现错阴性，这视具体任务要求而定。</p>
+<h2 id="Bloom-Filter"><a href="#Bloom-Filter" class="headerlink" title="Bloom Filter"></a>Bloom Filter</h2><p>BF 用于维护一个支持：插入元素、查找存在性的集合。</p>
+<p>一个 BF 包括 $n$ 个 cell 和 $m$ 个 Hash 函数，分别记为 $c_i$ 和 $h_i$。插入键值 $k$ 时，将 $c_{h_i(k)}$ 的值置为 $1$，即将 $k$ 通过 $m$ 个 Hash 函数算出 $m$ 个下标，并将这些下标对应的桶置 $1$。查找存在性时返回 $\prod_{i&#x3D;1}^m c_{h_i(k)}$ ，即是否该元素所有对应的桶都为 $1$。</p>
+<p>BF 会有假阳性，但不会有错阴性。假设用于存储 $N$ 个不同元素，则等价于在 $n$ 个 cell 中随机置 $1$ 操作 $Nm$ 次，因此单个元素为 $0$ 的概率为 $p&#x3D;(1-1&#x2F;n)^{Nm}$。于是假阳率为：$P_{fp}&#x3D;(1-p)^m\approx (1-e^{-Nm&#x2F;n})^m$。一般使用时，$N$ 和 $n$ 是已知量，给定 $P_{fp}$ 的可接受上界反推 $m$。</p>
+<h2 id="Invertible-Bloom-Lookup-Table"><a href="#Invertible-Bloom-Lookup-Table" class="headerlink" title="Invertible Bloom Lookup Table"></a>Invertible Bloom Lookup Table</h2><p>IBLT 在 BF 的基础上，将存在性查找拓展为键值对存储。支持：插入键值对、删除键、根据键查找值。</p>
+<p>一个 IBLT 包括 $n$ 个 cell 和  $k$ 个 Hash 函数，分别记为 $c_i$ 和 $h_i$。额外注意：IBLT 要求 $h_i$ 不产生重复结果，这可以通过将 $n$ 个 cell 划分为 $k$ 个 $n&#x2F;k$ 的 cell 组合做到，且不影响渐进复杂度。每个 cell 包含 3 个字段：count、keySum、valueSum，初始均为 $0$。IBLT 会前置一个 BF，用于检验对应键是否已经被插入到 IBLT 中，确保 IBLT 维护的键是一个不可重集合。</p>
+<p>与 BF 类似，下文将一个键 $k$ 对应的所有下标的 cell 称为 “对应 cell”。</p>
+<ul>
+<li>插入键值对 $(K,V)$：将所有对应 cell 的 <code>count += 1, keySum += K, valueSum += V</code></li>
+<li>删除键值对 $(K,V)$：将所有对应 cell 的 <code>count -= 1, keySum -= K, valueSum -= V</code></li>
+<li>查找键 $K$ 对应的值：<ul>
+<li>（Fast Path）先遍历所有对应 cell，看看有没有满足：<code>count == 1 &amp;&amp; keySum == K</code> 的，如果有就返回对应 <code>value</code>；如果发现 <code>count == 0</code> 或者 <code>count == 1 &amp;&amp; keySum != K</code> 的，则为键 $K$ 不存在</li>
+<li>（Slow Path）若找不到，则尝试全量解码：不断尝试找到一个满足 <code>count == 1</code> 的桶（称为纯桶），拿取其中的 <code>(keySum, valueSum)</code> 作为键值对，执行删除键值对。直到能够找到一个桶满足 <code>count == 1 &amp;&amp; keySum == K</code> 则成功，或者无法继续删桶则失败</li>
+</ul>
+</li>
+</ul>
+<p>实际上 <code>keySum</code> 和 <code>valueSum</code> 的维护一般使用 XOR 异或和，确保操作的可逆性和值域范围。</p>
+<p>全量解码的过程等价于对一个随机 $m-$超图进行 peeling，即反复删除度数为 $1$ 的点及其关联的超边，该问题有解当且仅当图中不存在 2-core。结论是：存在一个常数 $C$，当 $N&gt;Cn$ 时解码几乎总是失败，当 $N&lt;Cn$ 时解码几乎总是成功；其中 $C&#x3D;\sup{0&lt;\alpha&lt;1;\forall x\in(0,1),1-e^{-k\alpha x^{k-1}}&lt;x}$。当 $k&#x3D;3$ 时取到最大值约 $0.818$，即需要约 $1.222$ 倍于元素数量的桶即可确保解码的高成功率。</p>
+<p>注意到上述分析是针对 IBLT 本身的无解概率，还需要额外考虑前置 BF 的假阳率和假阳带来的影响。</p>
+<p><strong>为什么使用 IBLT</strong>：直观上看，IBLT 只能存储 $0.818$ 倍总桶数个元素，那为什么我不直接开一个线性表存储呢？一方面是 IBLT 方便 Hash 进行 $O(1)$ 寻桶，另一方面是 IBLT 对合并的支持很好，两张键相同的 IBLT 可以直接求并、求差，水平扩展性很好。</p>
+<h2 id="Count-Min-Sketch"><a href="#Count-Min-Sketch" class="headerlink" title="Count-Min Sketch"></a>Count-Min Sketch</h2><p>CMS 用于统计键出现的频数，支持：插入键、查找键频数。</p>
+<p>一张 CMS 包含 $k$ 个 Hash 函数（记为 $h_i$）和一张 $k\times W$ 的频数表 $S$。在插入键 $K$ 时，将 $S[i,h_i(K)],i\in[1,m]$ 的值增加 $1$；在查找键 $K$ 的频数时，返回 $\min_{i\in[1,m]}S[i,h_i(K)]$。即直接查找对应格子的频数最小值。</p>
+<p>CMS 也有假阳性问题，查询到的值大于等于实际频数。结论是：若元素个数为 $N$，我们要满足对任意元素 $k$ 都以至少 $1-\delta$ 的概率有 $f’(k)\leq f(k)+\epsilon N$ 的条件下，需要有 $W&#x3D;\lceil e&#x2F;\epsilon \rceil,k&#x3D;\lceil \ln(1&#x2F;\delta)\rceil$。</p>
+<table>
+<thead>
+<tr>
+<th><img src="/2025/11/03/%E7%BD%91%E7%BB%9C/Filters%20and%20Sketches/image-20251103215116592.png"></th>
+<th><img src="/2025/11/03/%E7%BD%91%E7%BB%9C/Filters%20and%20Sketches/image-20251103215123828.png"></th>
+</tr>
+</thead>
+</table>
+<h2 id="Cuckoo-Sketch"><a href="#Cuckoo-Sketch" class="headerlink" title="Cuckoo Sketch"></a>Cuckoo Sketch</h2><p>Cuckoo Hash 是一种键存储方案，作用类似于 BF；保证不会出现假阳性，但可能出现假阴性（插入时也会对假阴性报错）。思想为：准备两个 Hash 函数 $h_1$ 和 $h_2$，待存储的键 $k$ 一定存在于 $C_{h_1(k)}$ 或者 $C_{h_2(k)}$ 中。若这两个 cell 都被使用，则先插入其中一个，把那个 cell 原本存储的键踢出，然后不断尝试将多出来的键插入到他另一个对应的 cell 中，直到遇到一个空 cell。<br><img src="/2025/11/03/%E7%BD%91%E7%BB%9C/Filters%20and%20Sketches/image-20251103221141952.png"></p>
+<p>考虑建图 $G$：点为 cell，当两个 cell 能够同时对应到一个元素时联边。插入过程无解当且仅当图 $G$ 中形成了一个环，即 IBLT 分析中的 2-core 问题的普通图版本（$k&#x3D;2$）。取 $k&#x3D;2$ 时，得到负载因子 $C&#x3D;0.5$。</p>
+<p>Cuckoo Filter 是对 Cuckoo Hash 的改进，优化了内存占用，不必存储完整的键且支持删除。Cuckoo Filter 只需要定义一个 Hash 函数，记为 $H$；则有 $h_1(x)&#x3D;H(x),h_2(x)&#x3D;H(x)\oplus H(\phi(x))$。其中 $\phi(x)$ 是 $x$ 的指纹函数，也是记录到 cell 中的值。由于有 $h_1(x)\oplus h_2(x)&#x3D;H(\phi(x))$，我们在踢出 $i$ 号 cell 中的元素 $V$ 时，可以推算出：它的另一个备选位置位于 $H(V)\oplus i$。</p>
+<p>由于 Cuckoo Filter 中 $h_1,h_2$ 不再独立，因此对 Cuckoo Filter 的 Balance 分析不再适用。（但差距不大）</p>
+<h2 id="Augmented-Sketch"><a href="#Augmented-Sketch" class="headerlink" title="Augmented Sketch"></a>Augmented Sketch</h2><p>TODO</p>
+<h2 id="Fermat-Sketch"><a href="#Fermat-Sketch" class="headerlink" title="Fermat Sketch"></a>Fermat Sketch</h2><p>TODO</p>
+<h2 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a>HyperLogLog</h2><p>TODO</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.iamdanny.online">I_Am_Danny</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.iamdanny.online/2025/11/03/%E7%BD%91%E7%BB%9C/Filters%20and%20Sketches/">http://blog.iamdanny.online/2025/11/03/%E7%BD%91%E7%BB%9C/Filters%20and%20Sketches/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.iamdanny.online" target="_blank">IAD's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a></div><div class="post_share"><div class="social-share" data-image="/img/icon.JPG" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2025/09/25/%E8%AF%BE%E7%A8%8B/%E8%AF%BE%E7%A8%8B%E8%AF%84%E4%BB%B7/ALL_judge/" title="NJU 课程评价_目录"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">NJU 课程评价_目录</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2025/09/25/%E7%BD%91%E7%BB%9C/ai4sys_CC/" title="网络组实习感想（AI4Sys_端到端拥塞控制）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-25</div><div class="title">网络组实习感想（AI4Sys_端到端拥塞控制）</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/icon.JPG" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">I_Am_Danny</div><div class="author-info__description">I_Am_Not_Danny</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/IAmDannyCN"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/IAmDannyCN" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bloom-Filter"><span class="toc-number">2.</span> <span class="toc-text">Bloom Filter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Invertible-Bloom-Lookup-Table"><span class="toc-number">3.</span> <span class="toc-text">Invertible Bloom Lookup Table</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Count-Min-Sketch"><span class="toc-number">4.</span> <span class="toc-text">Count-Min Sketch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cuckoo-Sketch"><span class="toc-number">5.</span> <span class="toc-text">Cuckoo Sketch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Augmented-Sketch"><span class="toc-number">6.</span> <span class="toc-text">Augmented Sketch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fermat-Sketch"><span class="toc-number">7.</span> <span class="toc-text">Fermat Sketch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HyperLogLog"><span class="toc-number">8.</span> <span class="toc-text">HyperLogLog</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By I_Am_Danny</div><div class="footer_custom_text"><style>.custom-link { font-family: "微软雅黑 Bold"; font-size: 16px; color: #0016BA; text-decoration: none; transition: color 0.5s, opacity 0.5s; } .custom-link:hover { color: #C40003; text-decoration: none; } .custom-link:visited { color: #0016BA; } </style><script>function changeTextOnHover(element, newText, originalText) { element.onmouseover = function() { element.style.opacity = 0; setTimeout(function() { element.innerText = newText; element.style.opacity = 1; }, 500); }; element.onmouseout = function() { element.style.opacity = 0; setTimeout(function() { element.innerText = originalText; element.style.opacity = 1; }, 500); }; } window.onload = function() { var linkElement = document.getElementById("custom-link"); changeTextOnHover(linkElement, "如潮涌至 领你归乡", "愿为逝者哀哭 泣下如雨 充盈渡川"); };</script><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Ri421X7sS" id="custom-link" class="custom-link">愿为逝者哀哭 泣下如雨 充盈渡川</a><br></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
