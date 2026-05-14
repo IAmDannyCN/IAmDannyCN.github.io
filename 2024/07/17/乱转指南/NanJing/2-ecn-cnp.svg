@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360">
+  <defs>
+    <style>
+      .title { font: 700 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1f2937; }
+      .label { font: 600 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1f2937; }
+      .small { font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #4b5563; }
+      .tiny { font: 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #6b7280; }
+      .box { fill: #f8fafc; stroke: #334155; stroke-width: 1.5; rx: 8; }
+      .blue { fill: #e0f2fe; stroke: #0369a1; }
+      .green { fill: #dcfce7; stroke: #15803d; }
+      .amber { fill: #fef3c7; stroke: #b45309; }
+      .rose { fill: #ffe4e6; stroke: #be123c; }
+      .violet { fill: #ede9fe; stroke: #6d28d9; }
+      .line { stroke: #334155; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke-dasharray: 6 5; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <text class="title" x="40" y="46">RoCEv2 ECN / CNP 拥塞反馈路径</text>
+  <rect class="box blue" x="55" y="140" width="190" height="78"/><text class="small" x="150" y="175" text-anchor="middle">Sender RNIC</text><text class="small" x="150" y="193" text-anchor="middle">Reaction Point</text>
+  <rect class="box amber" x="385" y="140" width="190" height="78"/><text class="small" x="480" y="175" text-anchor="middle">Switch Queue</text><text class="small" x="480" y="193" text-anchor="middle">Congestion Point</text>
+  <rect class="box green" x="715" y="140" width="190" height="78"/><text class="small" x="810" y="175" text-anchor="middle">Receiver RNIC</text><text class="small" x="810" y="193" text-anchor="middle">Notification Point</text>
+  <rect class="box rose" x="55" y="275" width="190" height="50"/><text class="small" x="150" y="305" text-anchor="middle">Rate Reduction / Pacing</text>
+  <path class="line" d="M 245 179 L 385 179"/><text class="tiny" x="315" y="172" text-anchor="middle">RoCEv2 data</text>
+  <path class="line" d="M 575 179 L 715 179"/><text class="tiny" x="645" y="172" text-anchor="middle">ECN CE mark</text>
+  <path class="line" d="M 810 218 C 810 300 150 300 150 218"/>
+  <text class="tiny" x="480" y="286" text-anchor="middle">CNP 返回发送端，触发降速</text>
+  <path class="line" d="M 150 218 L 150 275"/>
+  </svg>

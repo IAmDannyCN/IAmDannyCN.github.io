@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="620" viewBox="0 0 1220 620">
+  <defs>
+    <style>
+      .title { font: 700 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1f2937; }
+      .label { font: 600 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1f2937; }
+      .small { font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #4b5563; }
+      .tiny { font: 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #6b7280; }
+      .box { fill: #f8fafc; stroke: #334155; stroke-width: 1.5; rx: 8; }
+      .blue { fill: #e0f2fe; stroke: #0369a1; }
+      .green { fill: #dcfce7; stroke: #15803d; }
+      .amber { fill: #fef3c7; stroke: #b45309; }
+      .rose { fill: #ffe4e6; stroke: #be123c; }
+      .violet { fill: #ede9fe; stroke: #6d28d9; }
+      .line { stroke: #334155; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke-dasharray: 6 5; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <text class="title" x="40" y="46">RDMA Write 通信流程</text>
+  <rect class="box" x="80" y="82" width="130" height="48"/><text class="small" x="145" y="111" text-anchor="middle">Sender App</text><path class="dash" d="M 145 130 L 145 560" stroke="#94a3b8" stroke-width="1.5"/><rect class="box" x="250" y="82" width="130" height="48"/><text class="small" x="315" y="111" text-anchor="middle">Sender CPU</text><path class="dash" d="M 315 130 L 315 560" stroke="#94a3b8" stroke-width="1.5"/><rect class="box blue" x="420" y="82" width="130" height="48"/><text class="small" x="485" y="111" text-anchor="middle">Sender RNIC</text><path class="dash" d="M 485 130 L 485 560" stroke="#94a3b8" stroke-width="1.5"/><rect class="box amber" x="590" y="82" width="130" height="48"/><text class="small" x="655" y="111" text-anchor="middle">Ethernet Fabric</text><path class="dash" d="M 655 130 L 655 560" stroke="#94a3b8" stroke-width="1.5"/><rect class="box blue" x="760" y="82" width="130" height="48"/><text class="small" x="825" y="111" text-anchor="middle">Receiver RNIC</text><path class="dash" d="M 825 130 L 825 560" stroke="#94a3b8" stroke-width="1.5"/><rect class="box" x="930" y="82" width="130" height="48"/><text class="small" x="995" y="111" text-anchor="middle">Receiver DDR</text><path class="dash" d="M 995 130 L 995 560" stroke="#94a3b8" stroke-width="1.5"/><rect class="box" x="1100" y="82" width="130" height="48"/><text class="small" x="1165" y="111" text-anchor="middle">Receiver App</text><path class="dash" d="M 1165 130 L 1165 560" stroke="#94a3b8" stroke-width="1.5"/>
+  <path class="line" d="M 145 170 L 315 170"/><text class="tiny" x="230" y="163" text-anchor="middle">准备 registered buffer</text>
+  <path class="line" d="M 315 220 L 485 220"/><text class="tiny" x="400" y="213" text-anchor="middle">post RDMA_WRITE WQE</text>
+  <path class="line" d="M 315 270 L 485 270"/><text class="tiny" x="400" y="263" text-anchor="middle">doorbell</text>
+  <path class="line" d="M 485 320 L 485 355"/><text class="tiny" x="485" y="330.5" text-anchor="middle">fetch WQE / context</text>
+  <path class="line" d="M 485 390 L 315 390"/><text class="tiny" x="400" y="383" text-anchor="middle">PCIe DMA Read</text>
+  <path class="line" d="M 485 440 L 655 440"/><text class="tiny" x="570" y="433" text-anchor="middle">RoCEv2 packet</text>
+  <path class="line" d="M 655 480 L 825 480"/><text class="tiny" x="740" y="473" text-anchor="middle">ECMP / QoS / ECN</text>
+  <path class="line" d="M 825 520 L 995 520"/><text class="tiny" x="910" y="513" text-anchor="middle">PCIe DMA Write</text>
+  <path class="line" d="M 825 360 L 485 360"/><text class="tiny" x="655" y="353" text-anchor="middle">ACK</text>
+  <path class="line dash" d="M 485 170 L 145 170"/><text class="tiny" x="315" y="163" text-anchor="middle">CQE</text>
+  <path class="line dash" d="M 1165 520 L 995 520"/><text class="tiny" x="1080" y="513" text-anchor="middle">poll / consume</text>
+  </svg>

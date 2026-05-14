@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="420" viewBox="0 0 1320 420">
+  <defs>
+    <style>
+      .title { font: 700 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1f2937; }
+      .label { font: 600 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1f2937; }
+      .small { font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #4b5563; }
+      .tiny { font: 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #6b7280; }
+      .box { fill: #f8fafc; stroke: #334155; stroke-width: 1.5; rx: 8; }
+      .blue { fill: #e0f2fe; stroke: #0369a1; }
+      .green { fill: #dcfce7; stroke: #15803d; }
+      .amber { fill: #fef3c7; stroke: #b45309; }
+      .rose { fill: #ffe4e6; stroke: #be123c; }
+      .violet { fill: #ede9fe; stroke: #6d28d9; }
+      .line { stroke: #334155; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke-dasharray: 6 5; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <text class="title" x="40" y="46">RDMA 链路瓶颈分析</text>
+  <rect class="box green" x="35" y="120" width="130" height="76"/><text class="small" x="100" y="145" text-anchor="middle">Source DDR</text><text class="small" x="100" y="163" text-anchor="middle">Memory BW</text><text class="small" x="100" y="181" text-anchor="middle">NUMA</text>
+  <rect class="box" x="205" y="120" width="130" height="76"/><text class="small" x="270" y="154" text-anchor="middle">PCIe RC</text><text class="small" x="270" y="172" text-anchor="middle">DMA Read</text>
+  <rect class="box blue" x="375" y="120" width="130" height="76"/><text class="small" x="440" y="145" text-anchor="middle">Sender RNIC</text><text class="small" x="440" y="163" text-anchor="middle">QP / MTT</text><text class="small" x="440" y="181" text-anchor="middle">Packetizer</text>
+  <rect class="box" x="545" y="120" width="130" height="76"/><text class="small" x="610" y="145" text-anchor="middle">NIC Port</text><text class="small" x="610" y="163" text-anchor="middle">Line Rate</text><text class="small" x="610" y="181" text-anchor="middle">PPS</text>
+  <rect class="box amber" x="715" y="120" width="130" height="76"/><text class="small" x="780" y="145" text-anchor="middle">Leaf</text><text class="small" x="780" y="163" text-anchor="middle">Buffer</text><text class="small" x="780" y="181" text-anchor="middle">ECN / PFC</text>
+  <rect class="box amber" x="885" y="120" width="130" height="76"/><text class="small" x="950" y="145" text-anchor="middle">Spine Fabric</text><text class="small" x="950" y="163" text-anchor="middle">ECMP</text><text class="small" x="950" y="181" text-anchor="middle">Oversub</text>
+  <rect class="box blue" x="1055" y="120" width="130" height="76"/><text class="small" x="1120" y="145" text-anchor="middle">Receiver RNIC</text><text class="small" x="1120" y="163" text-anchor="middle">RX / Reorder</text><text class="small" x="1120" y="181" text-anchor="middle">DMA</text>
+  <rect class="box green" x="1155" y="280" width="130" height="76"/><text class="small" x="1220" y="305" text-anchor="middle">Target DDR</text><text class="small" x="1220" y="323" text-anchor="middle">Memory BW</text><text class="small" x="1220" y="341" text-anchor="middle">Consume</text>
+  <path class="line" d="M 165 158 L 205 158"/><path class="line" d="M 335 158 L 375 158"/><path class="line" d="M 505 158 L 545 158"/><path class="line" d="M 675 158 L 715 158"/><path class="line" d="M 845 158 L 885 158"/><path class="line" d="M 1015 158 L 1055 158"/>
+  <path class="line" d="M 1120 196 L 1195 280"/><text class="tiny" x="1157.5" y="231" text-anchor="middle">PCIe DMA Write</text>
+  <text class="tiny" x="660" y="245" text-anchor="middle">任意一段的带宽、队列、缓存或调度限制，都可能成为端到端吞吐与尾延迟瓶颈</text>
+  </svg>

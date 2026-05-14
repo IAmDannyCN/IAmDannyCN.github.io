@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="420" viewBox="0 0 1180 420">
+  <defs>
+    <style>
+      .title { font: 700 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1f2937; }
+      .label { font: 600 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1f2937; }
+      .small { font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #4b5563; }
+      .tiny { font: 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #6b7280; }
+      .box { fill: #f8fafc; stroke: #334155; stroke-width: 1.5; rx: 8; }
+      .blue { fill: #e0f2fe; stroke: #0369a1; }
+      .green { fill: #dcfce7; stroke: #15803d; }
+      .amber { fill: #fef3c7; stroke: #b45309; }
+      .rose { fill: #ffe4e6; stroke: #be123c; }
+      .violet { fill: #ede9fe; stroke: #6d28d9; }
+      .line { stroke: #334155; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke-dasharray: 6 5; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <text class="title" x="40" y="46">RDMA 建链与准备流程</text>
+  <rect class="box blue" x="40" y="92" width="150" height="70"/><text class="small" x="115" y="123" text-anchor="middle">打开 RDMA</text><text class="small" x="115" y="141" text-anchor="middle">Device</text>
+  <rect class="box" x="235" y="92" width="150" height="70"/><text class="small" x="310" y="132" text-anchor="middle">创建 PD</text>
+  <rect class="box green" x="430" y="92" width="150" height="70"/><text class="small" x="505" y="123" text-anchor="middle">注册 MR</text><text class="small" x="505" y="141" text-anchor="middle">lkey / rkey</text>
+  <rect class="box" x="625" y="92" width="150" height="70"/><text class="small" x="700" y="132" text-anchor="middle">创建 CQ</text>
+  <rect class="box violet" x="820" y="92" width="150" height="70"/><text class="small" x="895" y="132" text-anchor="middle">创建 QP</text>
+  <rect class="box" x="1015" y="92" width="125" height="70"/><text class="small" x="1077.5" y="132" text-anchor="middle">INIT</text>
+  <path class="line" d="M 190 127 L 235 127"/><path class="line" d="M 385 127 L 430 127"/><path class="line" d="M 580 127 L 625 127"/><path class="line" d="M 775 127 L 820 127"/><path class="line" d="M 970 127 L 1015 127"/>
+  <rect class="box amber" x="235" y="250" width="185" height="82"/><text class="small" x="327.5" y="278" text-anchor="middle">交换连接信息</text><text class="small" x="327.5" y="296" text-anchor="middle">QPN / PSN / GID</text><text class="small" x="327.5" y="314" text-anchor="middle">rkey / addr</text>
+  <rect class="box" x="500" y="250" width="150" height="70"/><text class="small" x="575" y="281" text-anchor="middle">RTR</text><text class="small" x="575" y="299" text-anchor="middle">Ready to Receive</text>
+  <rect class="box" x="730" y="250" width="150" height="70"/><text class="small" x="805" y="281" text-anchor="middle">RTS</text><text class="small" x="805" y="299" text-anchor="middle">Ready to Send</text>
+  <rect class="box green" x="960" y="250" width="150" height="70"/><text class="small" x="1035" y="281" text-anchor="middle">post WQE</text><text class="small" x="1035" y="299" text-anchor="middle">开始通信</text>
+  <path class="line dash" d="M 1078 162 L 420 250"/><text class="tiny" x="749" y="199" text-anchor="middle">控制面交换</text>
+  <path class="line" d="M 420 291 L 500 285"/><path class="line" d="M 650 285 L 730 285"/><path class="line" d="M 880 285 L 960 285"/>
+  </svg>
